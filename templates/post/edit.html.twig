@@ -1,0 +1,18 @@
+{% extends ('base.html.twig') %}
+
+{% block body %}
+<h1>Ici pour éditer un post </h1>
+
+{{ form_start(form) }}
+
+   <p >Le titre : {{ form_widget(form.title)}}</p>
+    <br>
+    <p>Le texte:{{ form_widget(form.content)}} </p>
+    <button type="submit">Valider</button>
+
+{{ form_end(form) }}
+
+
+
+
+{% endblock %}

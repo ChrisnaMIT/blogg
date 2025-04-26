@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<div class="card">
+    <h2 class="card-title"></h2>
+    <div class="card-body">
+        {% if app.user %}
+
+            {% if post.author == app.user %}
+            <p>Tu as écrit ce post </p>
+            {% endif %}
+        {% endif %}
+
+        <p>Author: {{ post.author.email }}</p>
+        <p>le titre du post: {{ post.title }}</p>
+        <p>le contenu: {{ post.content }}</p>
+        <a href="{{ path('app_post_delete', {id:post.id}) }}">Supprimer ce post </a>
+        <hr>
+        <a href="{{ path('app_posts') }}">Retour</a>
+        <hr>
+        <a href="{{ path('app_post_edit', {id:post.id}) }}">Pour éditer le post </a>
+
+    </div>
+</div>
+
+    <h1>Ici les commentaires : </h1>
+
+<div >
+
+    {% for comment in comments %}
+        <p>{{ comment.author.email }} : {{ comment.content }}</p>
+    {% else %}
+        <p>Aucun commentaire</p>
+    {% endfor %}
+
+    <h3>Écrire un commentaire :</h3>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button type="submit">Envoyer</button>
+    {{ form_end(form) }}
+
+
+
+</div>
+{% endblock %}

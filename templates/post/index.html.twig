@@ -3,18 +3,40 @@
 {% block title %}Hello PostController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <a href="{{ path('app_post_create') }}">Pour créer un nouveau post </a>
+    <br>
+    <a href="{{ path('app_register') }}">Register </a>
+    <br>
+    <a href="{{ path('app_login') }}">Login</a>
 
-<div class="example-wrapper">
-    <h1>Hello  ✅</h1>
+    <h1>Tous les posts</h1>
+    {% for post in posts %}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/Users/mitchrisna/Documents/projetsSymfony/blogg/src/Controller/PostController.php</code></li>
-        <li>Your template at <code>/Users/mitchrisna/Documents/projetsSymfony/blogg/templates/post/index.html.twig</code></li>
-    </ul>
-</div>
+    <div class="card">
+        <h2 class="card-title">{{ post.title }}</h2>
+        <div class="card-body">
+            {% if app.user %}
+
+            {% if post.author == app.user %}
+            <p>Tu as écrit ce post </p>
+
+            {% endif %}
+
+            {% endif %}
+
+            <p>Author: {{ post.author.email }}</p>
+            <p>Le titre: {{ post.title }}</p>
+            <p>{{ post.content }}</p>
+            <a href="{{ path('app_post_show', {id:post.id}) }}">Voir ce post </a>
+
+
+        </div>
+        <hr>
+
+
+    </div>
+
+    {% endfor %}
+
+
 {% endblock %}

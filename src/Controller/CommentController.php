@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Post;
+use App\Form\CommentType;
+use App\Entity\Comment;
 use Doctrine\ORM\EntityManagerInterface;
-use PhpParser\Comment;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,6 +31,7 @@ final class CommentController extends AbstractController
        return $this->redirectToRoute('app_post_show', ['id' => $post->getId()]);
     }
 
+
     #[Route('/comment/delete/{id}', name: 'app_comment_delete')]
     public function delete(Comment $comment, EntityManagerInterface $manager): Response
     {
@@ -42,6 +45,26 @@ final class CommentController extends AbstractController
             $manager->flush();
         }
         return $this->redirectToRoute('app_post_show', ['id' => $post->getId()]);
+    }
+
+    #[Route('/comment/create/{id}', name: 'app_comment_create')]
+    public function create( Request $request, EntityManagerInterface $manager, Post $post): Response
+    {
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $manager->persist($comment);
+            $manager->flush();
+
+            return $this->redirectToRoute('app_post_show', ['id' => $post->getId()]);
+        }
+        return $this->render('post/show.html.twig',[
+            'form' => $form->createView(),
+            'post' => $post,
+            'comment' => $comment,
+            'comments' => $post->getComments(),
+        ]);
     }
 
 
